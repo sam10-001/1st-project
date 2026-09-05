@@ -22,6 +22,8 @@ v0=float(input("Enter initial velocity"))
 angle_deg=float(input("Enter launch angle in degrees"))
 
 x,y=get_trajectory(v0, angle_deg)
+range_distance=x[-1] #last x value = where it lands
+print(f"The projectile lands{range_distance:.2f} units away.")
 #plotting the trajectory
 plt.plot(x,y)
 plt.xlabel("horizontal dsitance covered")
