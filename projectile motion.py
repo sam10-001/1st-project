@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 g=9.8 #gravity, m/s^2
 
-##computing the trajectory
+##(1)computing the trajectory
 def get_trajectory(v0, angle_deg): #v0=initial velocity, angle_deg=angle in degrees
     angle=np.radians(angle_deg)     
     t_flight=2*v0*np.sin(angle)/g   #time of flight
@@ -29,4 +29,15 @@ plt.plot(x,y)
 plt.xlabel("horizontal dsitance covered")
 plt.ylabel("vertical distance covered")
 plt.title("Projectile Trajectory")
+plt.show()
+
+##(2)comparing different launch angles
+for angle in [30,45,60]:
+    x,y= get_trajectory(v0,angle)
+    plt.plot(x,y, label=f"{angle} degrees")
+
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.title("comparing launch angles")
 plt.show()
