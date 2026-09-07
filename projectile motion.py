@@ -61,7 +61,7 @@ plt.title("Complementary Angle Pairs- Same Range, Different Path")
 plt.show()'''
 
 ##(3) Euler's method version
-def get_trajectory_euler(v0,angle_deg, dt=0.1):
+'''def get_trajectory_euler(v0,angle_deg, dt=0.01):
     angle= np.radians(angle_deg)
     vx=v0*np.cos(angle)
     vy=v0*np.sin(angle)
@@ -76,6 +76,7 @@ def get_trajectory_euler(v0,angle_deg, dt=0.1):
         x_list.append(x)
         y_list.append(y)
     return np.array(x_list), np.array(y_list)
+
 #comparing exact formula with euler
 x_exact,y_exact=get_trajectory(v0,45)
 x_euler,y_euler=get_trajectory_euler(v0,45)
@@ -85,4 +86,40 @@ plt.plot(x_euler,y_euler, label="Euler's method", linestyle="--")
 plt.legend()
 plt.title("Exact vs. Euler's Method")
 plt.show()
+#learnt how changing the 'dt' value significantly impacts the accuracy of the Euler method, larger dt = larger error'''
 
+##(4) real world case with air resistance 
+def get_trajectory_drag(v0,angle_deg,k=0.02,dt=0.01): #k=0.02 is a drag coeff
+    angle=np.radians(angle_deg)
+    vx=v0*np.cos(angle)
+    vy=v0*np.sin(angle)
+
+    x,y=0,0
+    x_list,y_list=[x],[y]
+
+    while y>=0:
+        v=np.sqrt(vx**2 + vy**2)  #current speed
+        ax_drag= -k*v*vx #drag's effect on horizontal velocity
+        ay_drag= -k*v*vy #drag's effect on vertical velocity
+
+        vx += ax_drag*dt
+        vy+= (-g + ay_drag) *dt
+
+        x += vx*dt
+        y += vy*dt
+
+        x_list.append(x)
+        y_list.append(y)
+
+    return np.array(x_list), np.array(y_list)
+
+#comparing trajectory with air resistance and without
+x_exact,y_exact= get_trajectory(v0,45)
+x_drag,y_drag=get_trajectory_drag(v0,45)
+
+plt.plot(x_exact,y_exact, label="No air resistance")
+plt.plot(x_drag,y_drag, label="With air resistance", linestyle="--")
+plt.legend()
+plt.title("Effect of Air resistance")
+plt.show()
+#drag version has a noticeably shorter range
