@@ -32,7 +32,7 @@ plt.title("Projectile Trajectory")
 plt.show()'''
 
 ##(2)comparing different launch angles
-for angle in [30,45,60]:
+'''for angle in [30,45,60]:
     x,y= get_trajectory(v0,angle)
     plt.plot(x,y, label=f"{angle} degrees")
 
@@ -40,10 +40,10 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.legend()
 plt.title("comparing launch angles")
-plt.show()
+plt.show()'''
 
 #testing complementary angles (range similarity)
-angle_pairs=[(20,70),(30,60),(40,50)]
+'''angle_pairs=[(20,70),(30,60),(40,50)]
 for a1,a2 in angle_pairs:
     x1,y1=get_trajectory(v0,a1)
     x2,y2=get_trajectory(v0,a2)
@@ -58,4 +58,31 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.legend()
 plt.title("Complementary Angle Pairs- Same Range, Different Path")
+plt.show()'''
+
+##(3) Euler's method version
+def get_trajectory_euler(v0,angle_deg, dt=0.1):
+    angle= np.radians(angle_deg)
+    vx=v0*np.cos(angle)
+    vy=v0*np.sin(angle)
+
+    x,y=0,0
+    x_list, y_list=[x],[y]
+
+    while y>= 0:
+        x+= vx*dt
+        y+=vy*dt
+        vy-= g*dt
+        x_list.append(x)
+        y_list.append(y)
+    return np.array(x_list), np.array(y_list)
+#comparing exact formula with euler
+x_exact,y_exact=get_trajectory(v0,45)
+x_euler,y_euler=get_trajectory_euler(v0,45)
+
+plt.plot(x_exact,y_exact,label="Exact formula")
+plt.plot(x_euler,y_euler, label="Euler's method", linestyle="--")
+plt.legend()
+plt.title("Exact vs. Euler's Method")
 plt.show()
+
