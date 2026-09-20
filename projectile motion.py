@@ -1,10 +1,5 @@
 #code to simulate projectile motion using python
-'''equations needed: 
-x=u*cos(theta)*t 
-y=u*sin(theta)*t-0.5*g*t^2 
-t=2*u*np.sin(theta)/g
 
-'''
 import numpy as np
 import matplotlib.pyplot as plt
 g=9.8 #gravity, m/s^2
@@ -21,7 +16,7 @@ def get_trajectory(v0, angle_deg): #v0=initial velocity, angle_deg=angle in degr
 v0=float(input("Enter initial velocity"))
 angle_deg=float(input("Enter launch angle in degrees"))
 
-'''x,y=get_trajectory(v0, angle_deg)
+x,y=get_trajectory(v0, angle_deg)
 range_distance=x[-1] #last x value = where it lands
 print(f"The projectile lands{range_distance:.2f} units away.")
 #plotting the trajectory
@@ -29,10 +24,10 @@ plt.plot(x,y)
 plt.xlabel("horizontal dsitance covered")
 plt.ylabel("vertical distance covered")
 plt.title("Projectile Trajectory")
-plt.show()'''
+plt.show()
 
 ##(2)comparing different launch angles
-'''for angle in [30,45,60]:
+for angle in [30,45,60]:
     x,y= get_trajectory(v0,angle)
     plt.plot(x,y, label=f"{angle} degrees")
 
@@ -40,10 +35,10 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.legend()
 plt.title("comparing launch angles")
-plt.show()'''
+plt.show()
 
 #testing complementary angles (range similarity)
-'''angle_pairs=[(20,70),(30,60),(40,50)]
+angle_pairs=[(20,70),(30,60),(40,50)]
 for a1,a2 in angle_pairs:
     x1,y1=get_trajectory(v0,a1)
     x2,y2=get_trajectory(v0,a2)
@@ -58,10 +53,10 @@ plt.xlabel("x")
 plt.ylabel("y")
 plt.legend()
 plt.title("Complementary Angle Pairs- Same Range, Different Path")
-plt.show()'''
+plt.show()
 
 ##(3) Euler's method version
-'''def get_trajectory_euler(v0,angle_deg, dt=0.01):
+def get_trajectory_euler(v0,angle_deg, dt=0.01):
     angle= np.radians(angle_deg)
     vx=v0*np.cos(angle)
     vy=v0*np.sin(angle)
