@@ -7,8 +7,8 @@ df = pd.read_csv("exoplanets.csv", comment="#")
 #print(df.columns.tolist())
 
 #"for each year, how many exoplanets were found by each method?"
-'''import matplotlib.pyplot as plt
-counts_by_year_method= df.groupby(['disc_year', 'discoverymethod']).size().unstack(fill_value=0)
+import matplotlib.pyplot as plt
+'''counts_by_year_method= df.groupby(['disc_year', 'discoverymethod']).size().unstack(fill_value=0)
 #print (counts_by_year_method)
 #turning it into plot
 counts_by_year_method.plot(kind='bar', stacked=True, figsize=(14, 6))
@@ -46,3 +46,21 @@ plt.show()'''
 #confirming no relation numerically
 correlation = df['pl_orbper'].corr(df['pl_bmasse'])
 print("the Pearson correlation coefficient between orbital period and planet mass is : ",correlation)
+print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")
+
+#testing kepler's 3rd law graphically (T^2 propto a^3)
+plt.scatter(df['pl_orbsmax'],df["pl_orbper"],alpha=0.3, s=10)
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel("Orbital distance/ Semi major axis (AU, log scale)")
+plt.ylabel("Orbital Period (days, log scale)")
+plt.title("Orbital Period vs Orbital Distance")
+plt.show()
+# testing it numerically
+import numpy as np
+#drop rows with missing values in either column first
+valid=df[['pl_orbsmax','pl_orbper']].dropna()
+log_a=np.log10(valid['pl_orbsmax'])
+log_T=np.log10(valid['pl_orbper'])
+slope, intercept=np.polyfit(log_a,log_T,1)
+print(f"Slope: {slope:.3f}")
