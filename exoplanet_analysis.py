@@ -43,7 +43,7 @@ ax.set_title("Orbital Period vs Planet Mass, by Discovery Method")
 ax.legend(markerscale=3, fontsize=8)
 plt.show()'''
 
-#confirming no relation numerically
+'''#confirming no relation numerically
 correlation = df['pl_orbper'].corr(df['pl_bmasse'])
 print("the Pearson correlation coefficient between orbital period and planet mass is : ",correlation)
 print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")
@@ -63,4 +63,29 @@ valid=df[['pl_orbsmax','pl_orbper']].dropna()
 log_a=np.log10(valid['pl_orbsmax'])
 log_T=np.log10(valid['pl_orbper'])
 slope, intercept=np.polyfit(log_a,log_T,1)
-print(f"Slope: {slope:.3f}")
+print(f"Slope: {slope:.3f}")'''
+
+
+#rocky vs gas-giant classification using self computed density
+#Earth's actual density, for reference: ~5.51 g/cm^3
+#pl_bmasse is in earth masses, pl_rade is in Earth radii
+
+df['computed_density']= df['pl_bmasse']/(df['pl_rade']**3) #gives us density relative to Earth density
+#plot
+plt.hist(df['computed_density'].dropna(),bins=50,range=(0,5))
+plt.xlabel("Density relative to Earth")
+plt.ylabel("Number of planets")
+plt.title("Distribution of Relative PLanet Density")
+plt.show()
+#got a plot which isnt neatly bimodal
+
+plt.figure(figsize=(8,6))
+sc = plt.scatter(df['pl_rade'],df['pl_bmasse'],c=df['computed_density'],cmap='viridis',alpha=0.5,s=10,vmax=3)
+plt.xscale('log')
+plt.yscale('log')
+plt.xlabel("Planet Radius (Earth radii,log scale)")
+plt.ylabel("Planet Mass (Earth masses, log scale)")
+plt.colorbar(sc, label="Relative Density")
+plt.title("Mass vs Radius, Colored by Density")
+plt.show()
+
