@@ -48,7 +48,7 @@ correlation = df['pl_orbper'].corr(df['pl_bmasse'])
 print("the Pearson correlation coefficient between orbital period and planet mass is : ",correlation)
 print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")
 
-#testing kepler's 3rd law graphically (T^2 propto a^3)
+#testing kepler's 3rd law graphically (T^2 proportional to a^3)
 plt.scatter(df['pl_orbsmax'],df["pl_orbper"],alpha=0.3, s=10)
 plt.xscale('log')
 plt.yscale('log')
