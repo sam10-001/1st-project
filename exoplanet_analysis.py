@@ -46,7 +46,7 @@ plt.show()'''
 '''#confirming no relation numerically
 correlation = df['pl_orbper'].corr(df['pl_bmasse'])
 print("the Pearson correlation coefficient between orbital period and planet mass is : ",correlation)
-print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")
+print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")'''
 
 #testing kepler's 3rd law graphically (T^2 proportional to a^3)
 plt.scatter(df['pl_orbsmax'],df["pl_orbper"],alpha=0.3, s=10)
@@ -63,7 +63,7 @@ valid=df[['pl_orbsmax','pl_orbper']].dropna()
 log_a=np.log10(valid['pl_orbsmax'])
 log_T=np.log10(valid['pl_orbper'])
 slope, intercept=np.polyfit(log_a,log_T,1)
-print(f"Slope: {slope:.3f}")'''
+print(f"Slope: {slope:.3f}")
 
 
 #rocky vs gas-giant classification using self computed density
@@ -88,4 +88,18 @@ plt.ylabel("Planet Mass (Earth masses, log scale)")
 plt.colorbar(sc, label="Relative Density")
 plt.title("Mass vs Radius, Colored by Density")
 plt.show()
+
+
+#ml
+#only keep planets with both mass and radius known
+'''labeled=df[['pl_bmasse', 'pl_rade']].dropna().copy()
+
+def classify (row):
+    if row['pl_rade']<2:
+        return 'rocky'
+    elif row['pl_rade']>6:
+        return 'gas giant'
+    else:
+        return None #ambiguous'''
+    
 
