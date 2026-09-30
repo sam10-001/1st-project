@@ -148,3 +148,12 @@ predictions= model.predict(X_test) #feeds the test sets to the model and make it
 accuracy=accuracy_score(y_test,predictions) #compares the model guesses to against actual correct answers
 
 print(f"Accuracy:{accuracy:.2%}")
+
+
+#visualise the tree
+from sklearn.tree import plot_tree
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12,6))
+plot_tree(model,feature_names=['mass','radius'],class_names=model.classes_,filled=True)
+plt.show()
