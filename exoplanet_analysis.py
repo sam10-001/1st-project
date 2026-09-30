@@ -48,7 +48,7 @@ correlation = df['pl_orbper'].corr(df['pl_bmasse'])
 print("the Pearson correlation coefficient between orbital period and planet mass is : ",correlation)
 print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")'''
 
-#testing kepler's 3rd law graphically (T^2 proportional to a^3)
+'''#testing kepler's 3rd law graphically (T^2 proportional to a^3)
 plt.scatter(df['pl_orbsmax'],df["pl_orbper"],alpha=0.3, s=10)
 plt.xscale('log')
 plt.yscale('log')
@@ -87,19 +87,64 @@ plt.xlabel("Planet Radius (Earth radii,log scale)")
 plt.ylabel("Planet Mass (Earth masses, log scale)")
 plt.colorbar(sc, label="Relative Density")
 plt.title("Mass vs Radius, Colored by Density")
-plt.show()
+plt.show()'''
 
 
 #ml
+##creating labels 
 #only keep planets with both mass and radius known
-'''labeled=df[['pl_bmasse', 'pl_rade']].dropna().copy()
+labeled=df[['pl_bmasse', 'pl_rade']].dropna().copy()
+labeled['computed_density']=labeled['pl_bmasse']/(labeled['pl_rade']**3) 
 
-def classify (row):
-    if row['pl_rade']<2:
+'''def classify (row): #function to decide whether rocky or gas giant
+    if row['pl_rade']<2: #less than twice of Earth radius (pl_rade is relative to earth radius)
         return 'rocky'
     elif row['pl_rade']>6:
         return 'gas giant'
     else:
-        return None #ambiguous'''
-    
+        return None #ambiguous, we will drop these
 
+labeled['label']=labeled.apply(classify, axis=1)
+labeled=labeled.dropna(subset=['label']) #removes every row where classify returned none
+
+print(labeled['label'].value_counts)'''
+#above is weak approach
+
+def classify (row):
+    if row['computed_density']>0.7:
+        return 'rocky'
+    elif row['computed_density']<0.3:
+        return 'gas giant'
+    else:
+        return None
+
+#the zone between 0.3 and 0.7 is the ambiguous zone where density alone cannot clearly say if its rocky or gas giant
+
+labeled['label']=labeled.apply(classify,axis=1)
+labeled=labeled.dropna(subset=['label'])
+
+print(labeled['label'].value_counts())
+
+##training sets & test sets
+from sklearn.model_selection import train_test_split
+X= labeled[['pl_bmasse', 'pl_rade']] #inputs: mass and radius
+y=labeled['label']   #what we want to predict 
+
+X_train,X_test,y_train, y_test=train_test_split(X,y,test_size=0.2,random_state=42)
+
+print(X_train.shape, X_test.shape)
+
+##training the actual model
+from sklearn.tree import DecisionTreeClassifier
+
+model=DecisionTreeClassifier(max_depth=3, random_state=42) #dtc creates untrained model obj, md=avoids overfitting,rs=keeps results reproducible
+model.fit(X_train, y_train)#actual training step
+print("model trained ;)")
+
+##using the model to predict
+from sklearn.metrics import accuracy_score
+
+predictions= model.predict(X_test) #feeds the test sets to the model and make it predict
+accuracy=accuracy_score(y_test,predictions) #compares the model guesses to against actual correct answers
+
+print(f"Accuracy:{accuracy:.2%}")
