@@ -177,3 +177,12 @@ balanced_data=pd.concat([transit,radial_velocity])
 X2=balanced_data[['pl_bmasse','pl_rade','pl_orbper']]
 y2=balanced_data['discoverymethod']
 print(y2.value_counts())
+
+#training on new data
+X2_train,X2_test,y2_train,y2_test=train_test_split(X2,y2,test_size=0.2,random_state=42)
+mode12=DecisionTreeClassifier(max_depth=3,random_state=42)
+mode12.fit(X2_train,y2_train)
+
+predictions2=mode12.predict(X2_test)
+accuracy2=accuracy_score(y2_test,predictions2)
+print(f"Accuracy:{accuracy2:.2%}")
