@@ -96,7 +96,7 @@ plt.show()'''
 labeled=df[['pl_bmasse', 'pl_rade']].dropna().copy()
 labeled['computed_density']=labeled['pl_bmasse']/(labeled['pl_rade']**3) 
 
-'''def classify (row): #function to decide whether rocky or gas giant
+def classify (row): #function to decide whether rocky or gas giant
     if row['pl_rade']<2: #less than twice of Earth radius (pl_rade is relative to earth radius)
         return 'rocky'
     elif row['pl_rade']>6:
@@ -107,7 +107,7 @@ labeled['computed_density']=labeled['pl_bmasse']/(labeled['pl_rade']**3)
 labeled['label']=labeled.apply(classify, axis=1)
 labeled=labeled.dropna(subset=['label']) #removes every row where classify returned none
 
-print(labeled['label'].value_counts)'''
+print(labeled['label'].value_counts)
 #above is weak approach
 
 def classify (row):
@@ -180,14 +180,58 @@ print(y2.value_counts())
 
 #training on new data
 X2_train,X2_test,y2_train,y2_test=train_test_split(X2,y2,test_size=0.2,random_state=42)
-mode12=DecisionTreeClassifier(max_depth=3,random_state=42)
-mode12.fit(X2_train,y2_train)
+model2=DecisionTreeClassifier(max_depth=3,random_state=42)
+model2.fit(X2_train,y2_train)
 
-predictions2=mode12.predict(X2_test)
+predictions2=model2.predict(X2_test)
 accuracy2=accuracy_score(y2_test,predictions2)
 print(f"Accuracy:{accuracy2:.2%}")
 
 #visualising tree again
 plt.figure(figsize=(12,6))
-plot_tree(mode12,feature_names=['mass','radius','orbital period'], class_names=mode12.classes_,filled=True)
+plot_tree(model2,feature_names=['mass','radius','orbital period'], class_names=model2.classes_,filled=True)
 plt.show()
+
+#more realistic approach to planet classifier
+features_df=df[['pl_bmasse','pl_rade','pl_orbper','sy_dist', 'pl_eqt', 'st_mass']].dropna().copy()
+features_df['computed_density'] = features_df['pl_bmasse'] / (features_df['pl_rade'] ** 3)
+
+def classify(row):
+    if row['computed_density'] > 0.7:
+        return 'rocky'
+    elif row['computed_density'] < 0.3:
+        return 'gas giant'
+    else:
+        return None
+
+features_df['label'] = features_df.apply(classify, axis=1)
+features_df = features_df.dropna(subset=['label'])
+
+X3 = features_df[['pl_orbper', 'sy_dist', 'pl_eqt', 'st_mass']]
+y3 = features_df['label']
+
+print(y3.value_counts())
+
+#balancing the data
+rocky=features_df[features_df['label']=='rocky']
+gas_giant=features_df[features_df['label']=='gas giant']
+
+balanced=pd.concat([rocky,gas_giant])
+X3=balanced[['pl_orbper','sy_dist','pl_eqt','st_mass']]
+y3=balanced['label']
+
+print(y3.value_counts())
+
+X3_train,X3_test,y3_train,y3_test=train_test_split(X3,y3,test_size=0.2,random_state=42)
+
+model3=DecisionTreeClassifier(max_depth=3,random_state=42)
+model3.fit(X3_train,y3_train)
+
+predictions3=model3.predict(X3_test)
+accuracy3=accuracy_score(y3_test,predictions3)
+print(f"Accuracy:{accuracy3:.2%}")
+
+plt.figure(figsize=(12,6))
+plot_tree(model3,feature_names=['orbital period','distance','eg. temp','star mass'],class_names=model3.classes_,filled=True)
+plt.show()
+
