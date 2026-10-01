@@ -157,3 +157,23 @@ import matplotlib.pyplot as plt
 plt.figure(figsize=(12,6))
 plot_tree(model,feature_names=['mass','radius'],class_names=model.classes_,filled=True)
 plt.show()
+
+##predicting discovery method
+#Use the two most common methods for a cleaner first attempt
+subset=df[df['discoverymethod'].isin(['Transit','Radial Velocity'])]
+
+data=subset[['pl_bmasse', 'pl_rade','pl_orbper','discoverymethod']].dropna()
+X2=data[['pl_bmasse','pl_rade','pl_orbper']]
+y2=data['discoverymethod']
+
+print(y2.value_counts())
+
+#50/50
+transit= data[data['discoverymethod']=='Transit'].sample(n=98,random_state=42)
+radial_velocity=data[data['discoverymethod']=='Radial Velocity']
+
+balanced_data=pd.concat([transit,radial_velocity])
+
+X2=balanced_data[['pl_bmasse','pl_rade','pl_orbper']]
+y2=balanced_data['discoverymethod']
+print(y2.value_counts())
