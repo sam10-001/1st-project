@@ -186,3 +186,8 @@ mode12.fit(X2_train,y2_train)
 predictions2=mode12.predict(X2_test)
 accuracy2=accuracy_score(y2_test,predictions2)
 print(f"Accuracy:{accuracy2:.2%}")
+
+#visualising tree again
+plt.figure(figsize=(12,6))
+plot_tree(mode12,feature_names=['mass','radius','orbital period'], class_names=mode12.classes_,filled=True)
+plt.show()
