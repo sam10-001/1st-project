@@ -19,7 +19,7 @@ A physics simulation project exploring projectile motion using both exact kinema
 Exploring real observational data from the NASA Exoplanet Archive (Planetary Systems table), moving from self-generated data to real, messy astronomical data.
 
 ### Analysis 1: Discovery Methods Over Time
-Explored how the *method* used to discover exoplanets has changed since the first confirmed detections in the early 1990s, using a grouped/stacked bar chart of discoveries by year and discovery method.
+Explored how the method used to discover exoplanets has changed since the first confirmed detections in the early 1990s, using a grouped/stacked bar chart of discoveries by year and discovery method.
 
 **Findings:**
 - Early discoveries (1990s–2000s) were dominated by the Radial Velocity method, which detects planets via the gravitational wobble they cause in their host star.
