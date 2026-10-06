@@ -65,3 +65,9 @@ Tried to make the planet classifier more realistic by using different inputs (in
 
 Surprisingly, distance from Earth was the single most important feature in this tree — but this likely reflects detection bias rather than any real physical relationship. Smaller, rocky planets produce fainter detection signals and are harder to find at greater distances, so "distance" may actually be acting as a proxy for "how hard this planet was to detect" rather than directly influencing composition. This is a good example of why strong model performance doesn't automatically mean a causal relationship was found — correlation and detection bias can produce similar-looking patterns.
 
+
+# Project 3: Gravitational Wave Detection (GWOSC)
+
+First hands-on work with real LIGO data, using the GWpy library to load and analyze strain data from GW150914 — the first gravitational wave ever detected.
+
+Note: 'Timseries.fetch_open_data()' repeatedly timed out on my network, so i downloaded the H1 strain data file manually from GWOSC's website and loaded it locally instead. The underlying data is identical either way, this was a workaround for a local network issue, not a change in the actual analysis
