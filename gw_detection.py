@@ -27,9 +27,9 @@ sample_rate=len(strain)/duration
 data=TimeSeries(strain,sample_rate=sample_rate,t0=gps_start,name='H1:Strain')
 print(data)
 #plotting the data
-'''import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 plot=data.plot()
-plt.xlabel("time")
+plt.xlabel("Time")
 plt.ylabel("Strain")
 plt.title('Raw H1 Strain Data around GW150914')
-plt.show()'''
+plt.show()
