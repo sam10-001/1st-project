@@ -54,3 +54,22 @@ plt.xlabel("time")
 plt.ylabel("filtered strain")
 plt.title("filtered H1 strain near GW150914 merger")
 plt.show()
+
+#match-filtering
+#building a siimple "chirp" template
+import numpy as np
+
+def make_chirp_template (duration, sample_rate, f_start=35,f_end=250):
+    t=np.linspace(0,duration,int(duration*sample_rate))
+    #frequency increases linearly from f_start to f_end over the duration
+    freq=f_start+(f_end-f_start)*(t/duration) 
+    '''this is an approximation as inspiral frequency dont increase linearly'''
+    #amplitude grows slightly toward the end, mimicking a real inspiral 
+    amplitude=np.linspace(0.5, 1.0, len(t))
+    template=amplitude*np.sin(2*np.pi*freq*t)
+    return template
+template=make_chirp_template(duration=0.3, sample_rate=4096)
+import matplotlib.pyplot as plt
+plt.plot(template)
+plt.title("Simplidied Chirp template")
+plt.show()
