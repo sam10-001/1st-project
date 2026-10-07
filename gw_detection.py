@@ -73,3 +73,15 @@ import matplotlib.pyplot as plt
 plt.plot(template)
 plt.title("Simplidied Chirp template")
 plt.show()
+
+#sliding chirp template across real data
+from scipy.signal import correlate
+#make sure template and data are both plain numpy arrays, same units roughly
+data_values=np.array(white_data.value)
+template_values=template
+correlation=correlate(data_values,template_values,mode='valid')
+plt.plot(correlation)
+plt.xlabel('Time shift(sample)')
+plt.ylabel("Correlation strength")
+plt.title("Matched Filter: Template vs Whitened Data")
+plt.show()

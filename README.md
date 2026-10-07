@@ -71,3 +71,10 @@ Surprisingly, distance from Earth was the single most important feature in this 
 First hands-on work with real LIGO data, using the GWpy library to load and analyze strain data from GW150914 — the first gravitational wave ever detected.
 
 Note: 'Timseries.fetch_open_data()' repeatedly timed out on my network, so i downloaded the H1 strain data file manually from GWOSC's website and loaded it locally instead. The underlying data is identical either way, this was a workaround for a local network issue, not a change in the actual analysis
+
+### Simplified matched filtering
+
+Built an approximate chirp template (linearly increasing frequency, 35–250 Hz, 0.3s duration) and correlated it against the whitened strain data. The tallest correlation peak appeared almost exactly at the known merger time (center of the data window) — a genuinely encouraging sign.However, several other peaks in the noise were only modestly smaller, 
+so this simplified approach doesn't yield an unambiguous detection on its own. Real GW searches use precise, physically-derived waveform 
+templates (not a linear-frequency approximation) and a proper signal-to-noise ratio against the noise background, rather than relative 
+peak height alone, to make statistically rigorous detections.
