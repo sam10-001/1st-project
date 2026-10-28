@@ -1,6 +1,9 @@
 #loading the csv data
 import pandas as pd
 df = pd.read_csv("exoplanets.csv", comment="#")
+print("rows in table:", len(df))
+print("unique planets:", df['pl_name'].nunique())
+print(df['default_flag'].value_counts())
 # above line tells pandas to ignore any line starting with hashtag
 #print (df.head())
 #print(df.columns)
