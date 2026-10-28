@@ -1,27 +1,30 @@
 #loading the csv data
 import pandas as pd
 df = pd.read_csv("exoplanets.csv", comment="#")
-print("rows in table:", len(df))
-print("unique planets:", df['pl_name'].nunique())
-print(df['default_flag'].value_counts())
 # above line tells pandas to ignore any line starting with hashtag
+df = df[df['default_flag'] == 1].copy()
+print("rows after filter:", len(df))
+
+
 #print (df.head())
 #print(df.columns)
 #print(df.columns.tolist())
 
 #"for each year, how many exoplanets were found by each method?"
+print(len(df))
 import matplotlib.pyplot as plt
-'''counts_by_year_method= df.groupby(['disc_year', 'discoverymethod']).size().unstack(fill_value=0)
+counts_by_year_method= df.groupby(['disc_year', 'discoverymethod']).size().unstack(fill_value=0)
 #print (counts_by_year_method)
 #turning it into plot
 counts_by_year_method.plot(kind='bar', stacked=True, figsize=(14, 6))
 plt.xlabel("Discovery Year")
 plt.ylabel("Number of Exoplanets Discovered")
 plt.title("Exoplanet Discoveries by Method Over Time")
-plt.show()'''
+plt.show()
 
 #"Do planets with longer orbital periods tend to be more massive?"
-'''plt.scatter(df['pl_orbper'],df['pl_bmasse'], alpha=0.3,s=10) #pl_orbper=orbital period, pl_bmasse=planet mass
+print(len(df))
+plt.scatter(df['pl_orbper'],df['pl_bmasse'], alpha=0.3,s=10) #pl_orbper=orbital period, pl_bmasse=planet mass
 plt.xscale('log')
 plt.yscale('log')
 #added log scale to evenly zoom out data so it doesnt get squished 
@@ -32,9 +35,9 @@ plt.show()
 #got a messy plot with some clusters revealing there could be a third variable, possibly discovery method
 
 #trying the plot again by method and resolve the mess
-fig,ax=plt.subplots(figsize=(10,7))'''
+fig,ax=plt.subplots(figsize=(10,7))
 
-'''for method in df['discoverymethod'].unique():
+for method in df['discoverymethod'].unique():
     subset=df[df['discoverymethod']==method]
     ax.scatter(subset['pl_orbper'],subset['pl_bmasse'],alpha=0.3,s=10,label=method)
 
@@ -44,14 +47,15 @@ ax.set_xlabel("Orbital Period (days, log scale)")
 ax.set_ylabel("Planet Mass (Earth masses, log scale)")
 ax.set_title("Orbital Period vs Planet Mass, by Discovery Method")
 ax.legend(markerscale=3, fontsize=8)
-plt.show()'''
+plt.show()
 
-'''#confirming no relation numerically
+#confirming no relation numerically
+print(len(df))
 correlation = df['pl_orbper'].corr(df['pl_bmasse'])
 print("the Pearson correlation coefficient between orbital period and planet mass is : ",correlation)
-print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")'''
+print("shows that orbital period and planet mass have virtually no linear relationship in this dataset")
 
-'''#testing kepler's 3rd law graphically (T^2 proportional to a^3)
+#testing kepler's 3rd law graphically (T^2 proportional to a^3)
 plt.scatter(df['pl_orbsmax'],df["pl_orbper"],alpha=0.3, s=10)
 plt.xscale('log')
 plt.yscale('log')
@@ -72,7 +76,7 @@ print(f"Slope: {slope:.3f}")
 #rocky vs gas-giant classification using self computed density
 #Earth's actual density, for reference: ~5.51 g/cm^3
 #pl_bmasse is in earth masses, pl_rade is in Earth radii
-
+print(len(df))
 df['computed_density']= df['pl_bmasse']/(df['pl_rade']**3) #gives us density relative to Earth density
 #plot
 plt.hist(df['computed_density'].dropna(),bins=50,range=(0,5))
@@ -90,12 +94,13 @@ plt.xlabel("Planet Radius (Earth radii,log scale)")
 plt.ylabel("Planet Mass (Earth masses, log scale)")
 plt.colorbar(sc, label="Relative Density")
 plt.title("Mass vs Radius, Colored by Density")
-plt.show()'''
+plt.show()
 
 
 #ml
 ##creating labels 
 #only keep planets with both mass and radius known
+print(len(df))
 labeled=df[['pl_bmasse', 'pl_rade']].dropna().copy()
 labeled['computed_density']=labeled['pl_bmasse']/(labeled['pl_rade']**3) 
 
@@ -122,13 +127,14 @@ def classify (row):
         return None
 
 #the zone between 0.3 and 0.7 is the ambiguous zone where density alone cannot clearly say if its rocky or gas giant
-
+print(len(df))
 labeled['label']=labeled.apply(classify,axis=1)
 labeled=labeled.dropna(subset=['label'])
 
 print(labeled['label'].value_counts())
 
 ##training sets & test sets
+print(len(df))
 from sklearn.model_selection import train_test_split
 X= labeled[['pl_bmasse', 'pl_rade']] #inputs: mass and radius
 y=labeled['label']   #what we want to predict 
@@ -138,6 +144,7 @@ X_train,X_test,y_train, y_test=train_test_split(X,y,test_size=0.2,random_state=4
 print(X_train.shape, X_test.shape)
 
 ##training the actual model
+print(len(df))
 from sklearn.tree import DecisionTreeClassifier
 
 model=DecisionTreeClassifier(max_depth=3, random_state=42) #dtc creates untrained model obj, md=avoids overfitting,rs=keeps results reproducible
@@ -145,6 +152,7 @@ model.fit(X_train, y_train)#actual training step
 print("model trained ;)")
 
 ##using the model to predict
+print(len(df))
 from sklearn.metrics import accuracy_score
 
 predictions= model.predict(X_test) #feeds the test sets to the model and make it predict
@@ -154,6 +162,7 @@ print(f"Accuracy:{accuracy:.2%}")
 
 
 #visualise the tree
+print(len(df))
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
 
@@ -216,6 +225,7 @@ y3 = features_df['label']
 print(y3.value_counts())
 
 #balancing the data
+print(len(df))
 rocky=features_df[features_df['label']=='rocky']
 gas_giant=features_df[features_df['label']=='gas giant']
 

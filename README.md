@@ -15,7 +15,7 @@ A physics simulation project exploring projectile motion using both exact kinema
 - Practical Python: NumPy arrays, Matplotlib plotting, functions, loops
 
 
-# Project 2: Exoplanet Dataset Analysis
+# Project 2: Exoplanet Dataset Analysis(STILL NEEDS WORK)
 Exploring real observational data from the NASA Exoplanet Archive (Planetary Systems table), moving from self-generated data to real, messy astronomical data.
 
 ### Analysis 1: Discovery Methods Over Time
